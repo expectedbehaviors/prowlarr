@@ -139,17 +139,16 @@ externalSecrets:
     apiKeyRef:
       key: prowlarr
       property: api_key
-    postgresCredentialsRef:
-      key: prowlarr-postgresql-credentials
-      property: password
-    # Database mode for config.xml Postgres block: auto|sqlite|postgres|external-postgres
-    databaseMode: auto
-    enablePostgres: true
-    postgresUser: postgres
-    postgresPort: "5432"
-    postgresHost: ""
-    postgresMainDb: prowlarr-main
-    postgresLogDb: prowlarr-log
+    postgres:
+      method: bitnami
+      user: postgres
+      port: "5432"
+      host: ""
+      mainDb: prowlarr-main
+      logDb: prowlarr-log
+      credentialsRef:
+        key: prowlarr-postgresql-credentials
+        property: password
     options:
       logLevel: Info
       port: "9696"
