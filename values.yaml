@@ -1,6 +1,7 @@
 # Baseline Prowlarr. Override ingress host, persistence (existingClaim), postgresql (existingSecret), onepassworditem.items in your values.
 # Note: flaresolverr uses k8s-at-home (deprecated); consider migrating to TrueCharts or bjw-s alternative.
-# PostgreSQL: use embedded Bitnami (postgresql.enabled, default) or CloudNativePG operator (postgresqlOperator.enabled).
+# Database mode for config.xml rendering is externalSecrets.configXml.database.
+# Defaults to sqlite (no Postgres block in config.xml) unless explicitly set.
 postgresqlOperator:
   enabled: false
   clusterName: prowlarr-postgresql
@@ -16,6 +17,8 @@ prowlarr:
   controllers:
     main:
       enabled: true
+      annotations:
+        argocd.argoproj.io/sync-wave: "1"
       defaultContainerOptions:
         image:
           repository: linuxserver/prowlarr
@@ -113,7 +116,7 @@ flaresolverr:
       memory: 200Mi
 
 postgresql:
-  enabled: true
+  enabled: false
   architecture: standalone
   auth:
     database: prowlarr-main
@@ -139,8 +142,8 @@ externalSecrets:
     apiKeyRef:
       key: prowlarr
       property: api_key
+    database: sqlite # sqlite|bitnami|operator|external
     postgres:
-      method: bitnami
       user: postgres
       port: "5432"
       host: ""
