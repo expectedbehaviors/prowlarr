@@ -142,6 +142,26 @@ externalSecrets:
     postgresCredentialsRef:
       key: prowlarr-postgresql-credentials
       property: password
+    postgresUser: postgres
+    postgresPort: "5432"
+    postgresHost: postgresql-rw.postgresql.svc.cluster.local
+    postgresMainDb: prowlarr-main
+    postgresLogDb: prowlarr-log
+    options:
+      logLevel: Info
+      port: "9696"
+      urlBase: ""
+      bindAddress: "*"
+      sslPort: "9696"
+      enableSsl: "False"
+      authenticationMethod: Basic
+      branch: nightly
+      launchBrowser: "False"
+      updateMechanism: Docker
+      analyticsEnabled: "False"
+      updateAutomatically: "True"
+      instanceName: Prowlarr
+    # additionalOptions: {} # map of extra <Key>Value</Key> elements to append into config.xml
 
 onepassworditem:
   enabled: true
