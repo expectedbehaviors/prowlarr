@@ -1,0 +1,122 @@
+# Baseline Prowlarr. Override ingress host, persistence (existingClaim), postgresql (existingSecret), onepassworditem.items in your values.
+# Note: flaresolverr uses k8s-at-home (deprecated); consider migrating to TrueCharts or bjw-s alternative.
+prowlarr:
+  global:
+    fullnameOverride: prowlarr
+  controllers:
+    main:
+      enabled: true
+      defaultContainerOptions:
+        image:
+          repository: linuxserver/prowlarr
+          tag: nightly
+          pullPolicy: Always
+      containers:
+        main:
+          env:
+            DOCKER_MODS: linuxserver/mods:universal-wait-for-internet|ghcr.io/themepark-dev/theme.park:prowlarr
+            PGID: "1000"
+            PUID: "1000"
+            TP_HOTIO: "false"
+            TP_SCHEME: HTTPS
+            TP_THEME: aquamarine
+            TZ: UTC
+            UMASK: "2"
+          probes:
+            startup:
+              enabled: true
+              custom: true
+              spec:
+                failureThreshold: 90
+                periodSeconds: 5
+                successThreshold: 1
+                tcpSocket:
+                  port: 9696
+                timeoutSeconds: 1
+                initialDelaySeconds: 60
+          resources:
+            requests:
+              cpu: 250m
+              memory: 1Gi
+          securityContext:
+            allowPrivilegeEscalation: true
+            privileged: true
+            readOnlyRootFilesystem: false
+            runAsGroup: 0
+            runAsNonRoot: false
+            runAsUser: 0
+  defaultPodOptions:
+    securityContext:
+      fsGroup: 1000
+      fsGroupChangePolicy: "Always"
+  service:
+    main:
+      enabled: true
+      ports:
+        http:
+          enabled: true
+          port: 9696
+          protocol: HTTP
+  ingress:
+    main:
+      enabled: true
+      annotations: {}
+      hosts:
+        - host: prowlarr.example.com
+          paths:
+            - path: /
+              pathType: Prefix
+      tls:
+        - hosts:
+            - prowlarr.example.com
+          secretName: prowlarr-tls
+  persistence:
+    prowlarr-secrets:
+      enabled: true
+      type: secret
+      name: prowlarr
+      globalMounts:
+        - path: /config/config.xml
+          subPath: config.xml
+
+flaresolverr:
+  env:
+    BROWSER_TIMEOUT: "120000"
+    CAPTCHA_SOLVER: hcaptcha-solver
+    HEADLESS: "true"
+    HOST: "0.0.0.0"
+    LANG: en_GB
+    LOG_HTML: "true"
+    LOG_LEVEL: debug
+    PGID: "0"
+    PORT: "8191"
+    PUID: "0"
+    TZ: UTC
+    UMASK: "000"
+  image:
+    pullPolicy: Always
+    repository: ghcr.io/flaresolverr/flaresolverr
+    tag: latest
+  resources:
+    requests:
+      cpu: 5m
+      memory: 200Mi
+
+postgresql:
+  architecture: standalone
+  auth:
+    database: prowlarr-main
+    password: changeme
+  primary:
+    persistence:
+      enabled: true
+      size: 5Gi
+    name: prowlarr-main
+    resources:
+      requests:
+        cpu: "1"
+        memory: 2Gi
+
+onepassworditem:
+  enabled: true
+  items: []
