@@ -1,5 +1,15 @@
 # Baseline Prowlarr. Override ingress host, persistence (existingClaim), postgresql (existingSecret), onepassworditem.items in your values.
 # Note: flaresolverr uses k8s-at-home (deprecated); consider migrating to TrueCharts or bjw-s alternative.
+# PostgreSQL: use embedded Bitnami (postgresql.enabled, default) or CloudNativePG operator (postgresqlOperator.enabled).
+postgresqlOperator:
+  enabled: false
+  clusterName: prowlarr-postgresql
+  instances: 1
+  storageSize: 5Gi
+  storageClass: ""
+  bootstrap:
+    existingSecret: ""
+
 prowlarr:
   global:
     fullnameOverride: prowlarr
@@ -103,6 +113,7 @@ flaresolverr:
       memory: 200Mi
 
 postgresql:
+  enabled: true
   architecture: standalone
   auth:
     database: prowlarr-main
@@ -116,6 +127,21 @@ postgresql:
       requests:
         cpu: "1"
         memory: 2Gi
+
+externalSecrets:
+  enabled: false
+  refreshInterval: 1h
+  secretStoreRef:
+    name: onepassword-connect
+    kind: ClusterSecretStore
+  configXml:
+    secretName: prowlarr
+    apiKeyRef:
+      key: prowlarr
+      property: api_key
+    postgresCredentialsRef:
+      key: prowlarr-postgresql-credentials
+      property: password
 
 onepassworditem:
   enabled: true
