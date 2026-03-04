@@ -2,7 +2,7 @@ apiVersion: v2
 name: prowlarr
 description: Prowlarr (indexer manager) via bjw-s app-template. FlareSolverr, PostgreSQL, 1Password. Override ingress, persistence, postgresql in your values.
 version: 1.0.0
-appVersion: "1.22.0"
+appVersion: "1.0.0"
 kubeVersion: ">=1.22.0-0"
 keywords:
   - prowlarr
