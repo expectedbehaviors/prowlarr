@@ -1,5 +1,6 @@
 {{- define "prowlarrConfigXmlContent" -}}
-{{- $configXmlValues := .Values.externalSecrets.configXml | default dict }}
+{{- $externalSecrets := index (default dict .Values) "externalSecrets" | default dict }}
+{{- $configXmlValues := $externalSecrets.configXml | default dict }}
 {{- $configOptions := $configXmlValues.options | default dict }}
 {{- $postgresConfig := $configXmlValues.postgres | default dict }}
 {{- $databaseMode := lower ($configXmlValues.database | default ($postgresConfig.method | default "sqlite")) }}
