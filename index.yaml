@@ -2,8 +2,42 @@ apiVersion: v1
 entries:
   prowlarr:
   - apiVersion: v2
+    appVersion: 1.0.2
+    created: "2026-07-28T03:38:29.559292553Z"
+    dependencies:
+    - alias: prowlarr
+      name: app-template
+      repository: https://bjw-s-labs.github.io/helm-charts
+      version: 4.6.2
+    - name: flaresolverr
+      repository: https://k8s-at-home.com/charts
+      version: v5.4.2
+    - name: onepassworditem
+      repository: https://expectedbehaviors.github.io/OnePasswordItem-helm
+      version: 1.1.1
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 16.2.1
+    description: Prowlarr (indexer manager) via bjw-s app-template. FlareSolverr,
+      PostgreSQL, 1Password. Override ingress, persistence, postgresql in your values.
+    digest: b3f814791004ab47d5f4b184193666096bc268d2db9fcd3c1f4eddd61ba4d320
+    home: https://prowlarr.com
+    keywords:
+    - prowlarr
+    - indexer
+    - bjw-s
+    - app-template
+    kubeVersion: '>=1.22.0-0'
+    name: prowlarr
+    sources:
+    - https://github.com/Prowlarr/Prowlarr
+    urls:
+    - https://expectedbehaviors.github.io/prowlarr/prowlarr-1.0.2.tgz
+    version: 1.0.2
+  - apiVersion: v2
     appVersion: 1.0.1
-    created: "2026-06-07T23:06:25.166908181Z"
+    created: "2026-07-28T03:38:29.543324062Z"
     dependencies:
     - alias: prowlarr
       name: app-template
@@ -37,7 +71,7 @@ entries:
     version: 1.0.1
   - apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-06-07T23:06:25.150571086Z"
+    created: "2026-07-28T03:38:29.528630601Z"
     dependencies:
     - alias: prowlarr
       name: app-template
@@ -69,4 +103,4 @@ entries:
     urls:
     - https://expectedbehaviors.github.io/prowlarr/prowlarr-1.0.0.tgz
     version: 1.0.0
-generated: "2026-06-07T23:06:25.127039201Z"
+generated: "2026-07-28T03:38:29.513657685Z"
